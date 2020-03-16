@@ -3,13 +3,15 @@ package com.mengfei.fbsepjava.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Transient;
+import javax.validation.constraints.Email;
 
 @Entity
 public class User {
     @Id
     @GeneratedValue
     private Long id;
-    private String user_uuid;
+    private String userUuid;
     private String userName;
     private String passWord;
 
@@ -22,11 +24,11 @@ public class User {
     }
 
     public String getUser_uuid() {
-        return user_uuid;
+        return userUuid;
     }
 
     public void setUser_uuid(String user_uuid) {
-        this.user_uuid = user_uuid;
+        this.userUuid = user_uuid;
     }
 
     public String getUserName() {
@@ -78,22 +80,74 @@ public class User {
     }
 
     private String phoneNum;
+    @Email(message = "邮箱格式不正确")
     private String email;
     private String voucher_uuid;//我的礼品券
     private String revenue_address;//收益地址
+
+    private int remind_type;//提醒类型  -1：失效后提醒  1：失效前一天提醒  7：失效前七天提醒
+
+    @Transient
+    private int type;//标记是手机用户还是邮箱用户
+
+    private String google_authentication;//google身份验证起
+
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    @Transient
+    private int code;//验证码
+
+
+
 
 
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", user_uuid='" + user_uuid + '\'' +
+                ", userUuid='" + userUuid + '\'' +
                 ", userName='" + userName + '\'' +
                 ", passWord='" + passWord + '\'' +
                 ", phoneNum='" + phoneNum + '\'' +
                 ", email='" + email + '\'' +
                 ", voucher_uuid='" + voucher_uuid + '\'' +
                 ", revenue_address='" + revenue_address + '\'' +
+                ", google_authentication='" + google_authentication + '\'' +
+                ", remind_type='" + remind_type + '\'' +
+
+
+
                 '}';
+    }
+
+    public String getGoogle_authentication() {
+        return google_authentication;
+    }
+
+    public void setGoogle_authentication(String google_authentication) {
+        this.google_authentication = google_authentication;
+    }
+
+    public int getRemind_type() {
+        return remind_type;
+    }
+
+    public void setRemind_type(int remind_type) {
+        this.remind_type = remind_type;
     }
 }

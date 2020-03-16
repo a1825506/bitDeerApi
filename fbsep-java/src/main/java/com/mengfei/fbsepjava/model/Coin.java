@@ -21,12 +21,12 @@ public class Coin {
         this.id = id;
     }
 
-    public String getCoin_uuid() {
-        return coin_uuid;
+    public String getCoinUuid() {
+        return coinUuid;
     }
 
-    public void setCoin_uuid(String coin_uuid) {
-        this.coin_uuid = coin_uuid;
+    public void setCoinUuid(String coinUuid) {
+        this.coinUuid = coinUuid;
     }
 
     public String getCoin_id() {
@@ -88,26 +88,17 @@ public class Coin {
 
 
     @Column(nullable = false, unique = true)
-    @ApiModelProperty(value = "币的唯一标识,系统自动生成", name = "coin_uuid", example = "币的唯一标识,系统自动生成", required = false)
-    private String coin_uuid;
-    @ApiModelProperty(value = "数字货币id", name = "coin_id", example = "数字货币id", required = true)
+    private String coinUuid;
     private String coin_id;
-    @ApiModelProperty(value = "数字货币Symbol", name = "coin_symbol", example = "数字货币Symbol", required = true)
     private String coin_symbol;
-    @ApiModelProperty(value = "数字货币中文名", name = "coin_cn_name", example = "数字货币中文名", required = false)
     private String coin_cn_name;
-    @ApiModelProperty(value = "数字货币图标URL", name = "coin_icon", example = "数字货币图标URL", required = false)
     private String coin_icon;
-    @ApiModelProperty(value = "数字货币介绍", name = "coin_icon", example = "数字货币介绍", required = false)
     private String coin_introduction;
-    @ApiModelProperty(value = "数字货币所属矿机的唯一标识", name = "coin_icon", example = "数字货币所属矿机的唯一标识", required = true)
     private String miner_uuid;
 
     @Transient
-    @ApiModelProperty(value = "SHA256矿机", name = "coin_icon", example = "数字货币所属矿机名称", required = true)
     private String miner_nanme;
 
-    @ApiModelProperty(value = "89.23%", name = "Static_return_rate", example = "静态收益率", required = true)
     private String static_return_rate;
 
 
@@ -117,7 +108,7 @@ public class Coin {
     public String toString() {
         return "Coin{" +
                 "id=" + id +
-                ", coin_uuid='" + coin_uuid + '\'' +
+                ", coinUuid='" + coinUuid + '\'' +
                 ", coin_id='" + coin_id + '\'' +
                 ", coin_symbol='" + coin_symbol + '\'' +
                 ", coin_cn_name='" + coin_cn_name + '\'' +

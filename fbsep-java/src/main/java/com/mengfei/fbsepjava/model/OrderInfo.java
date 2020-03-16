@@ -15,6 +15,31 @@ public class OrderInfo {
     private String order_uuid;//系统内的uuid标识
     private String order_date;//订单日期
     private String order_amount;//订单金额
+    private String hashRate_uuid;//商品
+    private int orderStatus;//订单状态 0：系统异常  1：已支付  2：代支付  3：支出中  4：分笔支付中  5：代下发  6：已完成   7：已取消
+    private String userUuid;//订单所属人
+    private String coin_uuid;//数字货币id
+    private String miner_model;//矿机机型
+    private String hashRate_value;//套餐算力
+    private String cycle_day;//套餐周期
+    private String extended_days;//延长天数
+    private String miningPool_uuid;//矿池
+    private String payment_method;//收款方式  0 个人钱包  1 Matrixport钱包
+    private String computing_power;//订单算力费
+    private String electricity_bill;//订单电费
+
+    private String hashRate_name;//套餐名
+
+
+    public int getOrder_type() {
+        return order_type;
+    }
+
+    public void setOrder_type(int order_type) {
+        this.order_type = order_type;
+    }
+
+    private int order_type;// 0：算力订单  1：电费订单  100：全部订单
 
     public Long getId() {
         return id;
@@ -56,28 +81,28 @@ public class OrderInfo {
         this.hashRate_uuid = hashRate_uuid;
     }
 
-    public int getOrder_status() {
-        return order_status;
+    public int getOrderStatus() {
+        return orderStatus;
     }
 
-    public void setOrder_status(int order_status) {
-        this.order_status = order_status;
+    public void setOrderStatus(int orderStatus) {
+        this.orderStatus = orderStatus;
     }
 
-    public String getUser_uuid() {
-        return user_uuid;
+    public String getUserUuid() {
+        return userUuid;
     }
 
-    public void setUser_uuid(String user_uuid) {
-        this.user_uuid = user_uuid;
+    public void setUserUuid(String user_uuid) {
+        this.userUuid = user_uuid;
     }
 
-    public String getCoin_id() {
-        return coin_id;
+    public String getCoin_uuid() {
+        return coin_uuid;
     }
 
-    public void setCoin_id(String coin_id) {
-        this.coin_id = coin_id;
+    public void setCoin_uuid(String coin_id) {
+        this.coin_uuid = coin_id;
     }
 
     public String getMiner_model() {
@@ -144,17 +169,38 @@ public class OrderInfo {
         this.electricity_bill = electricity_bill;
     }
 
-    private String hashRate_uuid;//商品
-    private int order_status;//订单状态 0：系统异常  1：已支付  2：代支付  3：支出中  4：分笔支付中  5：代下发  6：已完成   7：已取消
-    private String user_uuid;//订单所属人
-    private String coin_id;//数字货币id
-    private String miner_model;//矿机机型
-    private String hashRate_value;//套餐算力
-    private String cycle_day;//套餐周期
-    private String extended_days;//延长天数
-    private String miningPool_uuid;//矿池
-    private String payment_method;//收款方式
-    private String computing_power;//订单算力费
-    private String electricity_bill;//订单电费
+    @Override
+    public String toString() {
+        return "OrderInfo{" +
+                "id=" + id +
+                ", order_uuid='" + order_uuid + '\'' +
+                ", order_date='" + order_date + '\'' +
+                ", order_amount='" + order_amount + '\'' +
+                ", hashRate_uuid='" + hashRate_uuid + '\'' +
+                ", orderStatus=" + orderStatus +
+                ", userUuid='" + userUuid + '\'' +
+                ", coin_uuid='" + coin_uuid + '\'' +
+                ", miner_model='" + miner_model + '\'' +
+                ", hashRate_value='" + hashRate_value + '\'' +
+                ", cycle_day='" + cycle_day + '\'' +
+                ", extended_days='" + extended_days + '\'' +
+                ", miningPool_uuid='" + miningPool_uuid + '\'' +
+                ", payment_method='" + payment_method + '\'' +
+                ", computing_power='" + computing_power + '\'' +
+                ", electricity_bill='" + electricity_bill + '\'' +
+                ", order_type='" + order_type + '\'' +
+                ", hashRate_name='" + hashRate_name + '\'' +
 
+
+
+                '}';
+    }
+
+    public String getHashRate_name() {
+        return hashRate_name;
+    }
+
+    public void setHashRate_name(String hashRate_name) {
+        this.hashRate_name = hashRate_name;
+    }
 }
