@@ -1,8 +1,11 @@
 package com.mengfei.admApijava.model;
 
+import com.mengfei.admApijava.model.retruns.PageInfo;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 /**
  * 订单实体类
@@ -29,6 +32,40 @@ public class OrderInfo {
     private String electricity_bill;//订单电费
 
     private String hashRate_name;//套餐名
+
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPhoneNum() {
+        return phoneNum;
+    }
+
+    public void setPhoneNum(String phoneNum) {
+        this.phoneNum = phoneNum;
+    }
+
+    @Transient
+    private String userName;//订单所属用户
+
+    @Transient
+    private String phoneNum;//订单所属手机号
+
+    public String getCoin() {
+        return coin;
+    }
+
+    public void setCoin(String coin) {
+        this.coin = coin;
+    }
+
+    @Transient
+    private String coin;//数字货币
 
 
     public int getOrder_type() {
@@ -203,4 +240,6 @@ public class OrderInfo {
     public void setHashRate_name(String hashRate_name) {
         this.hashRate_name = hashRate_name;
     }
+
+
 }

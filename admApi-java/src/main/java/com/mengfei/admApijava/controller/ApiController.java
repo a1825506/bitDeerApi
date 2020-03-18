@@ -10,6 +10,8 @@ import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.mengfei.admApijava.annotation.UserTokenCheck;
 import com.mengfei.admApijava.model.*;
+import com.mengfei.admApijava.model.retruns.PageInfo;
+import com.mengfei.admApijava.model.retruns.PageReturn;
 import com.mengfei.admApijava.services.interfaces.*;
 import com.mengfei.admApijava.model.*;
 import com.mengfei.admApijava.model.retruns.RevenueAddressRetrun;
@@ -52,18 +54,9 @@ public class ApiController {
     @Resource
     private UserInterface userInterface;
     @Resource
-    private RevenueAddressInterface revenueAddressInterface;
-    @Resource
     private NewsInterface newsInterface;
     @Resource
     private GiftCertificateInterface giftCertificateInterface;
-
-
-
-
-
-
-
 
     /*************************获取验证码*****************************************/
     @RequestMapping(value = "user/getCode",method = RequestMethod.POST)
@@ -163,6 +156,13 @@ public class ApiController {
     }
 
 
+    /*********************************增加矿机******************************************/
+    @RequestMapping(value = "miner/addMiner",method = RequestMethod.POST)
+    public ApiResponse addMiner(@RequestBody Miner miner){
+        miner.setMinerUuid(Utils.getUUID());
+        minerInterface.save(miner);
+        return new ApiResponse<>(200,"增加矿机型号成功",miner);
+    }
 
     /*************************增加在售算力******************************************/
     @RequestMapping(value = "coin/addCoin",method = RequestMethod.POST)
@@ -171,6 +171,7 @@ public class ApiController {
         coinInterface.save(coin);
         return new ApiResponse<>(200,"增加数字货币成功",coin);
     }
+
 
 
     /*************************查询在售算力******************************************/
@@ -192,15 +193,17 @@ public class ApiController {
 
     /*************************查询在售数字货币对应套餐******************************************/
     @RequestMapping(value = "hashRate/getHashRateSale",method = RequestMethod.POST)
-    public ApiResponse getHashRateSale(@RequestBody Map<String,String> map){
+    public ApiResponse getHashRateSale(@RequestBody Map<String,Object> map){
         //查找数字货币属所的矿机系列
-        String coinUuid = map.get("coinUuid");
-        System.out.println("coinUuid:"+coinUuid);
+        String coinUuid = (String)map.get("coinUuid");
+        String minerUUids = (String)map.get("minerUUids");
+        String[] minerUUid = minerUUids.split(",");
+
         List<HashRateSale> hashRateSaleList;
         SalePackage salePackage;
         List<SalePackage> salePackageList = new ArrayList<>();
-        List<Miner> minerList = minerInterface.findAllByCoinUuid(coinUuid);
-        for(Miner miner:minerList){
+        for(String mineruuid:minerUUid){
+            Miner miner = minerInterface.findByMinerUuid(mineruuid);
             salePackage = new SalePackage();
             //查找该币在该矿机系列下的在售套餐
             hashRateSaleList = hashRateSaleInterface.findByMinerUuidAndCoinUuid(miner.getMinerUuid(),coinUuid);
@@ -215,19 +218,60 @@ public class ApiController {
                 salePackage.setMiner(miner);
                 salePackageList.add(salePackage);
             }
-
         }
+
+
+
+
 
         return new ApiResponse<>(200,"查询在售数字货币成功",salePackageList);
     }
 
     /*********************************增加在售算力套餐******************************************/
-    @RequestMapping(value = "/addHashRateSale",method = RequestMethod.POST)
+    @RequestMapping(value = "hashRate/addHashRateSale",method = RequestMethod.POST)
     public ApiResponse addHashRateSale(@RequestBody HashRateSale hashRateSale){
         hashRateSale.setHashRate_uuid(Utils.getUUID());
         hashRateSaleInterface.save(hashRateSale);
         return new ApiResponse<>(200,"增加在售算力成功",hashRateSale);
     }
+
+    /*********************************管理员获取订单******************************************/
+    @RequestMapping(value = "order/getUserOrder",method = RequestMethod.POST)
+    public ApiResponse getUserOrder(@RequestBody HashMap<String,Object> map){
+        int pageNum = (int)map.get("pageNum");
+        int pageSize = 10;
+        if(map.size()>1){
+             pageSize = (int)map.get("pageSize");
+        }
+
+        // 排序方式，这里是以“recordNo”为标准进行降序
+//        Sort sort = new Sort(Sort.Direction.DESC, "recordNo");  // 这里的"recordNo"是实体类的主键，记住一定要是实体类的属性，而不能是数据库的字段
+
+        Pageable pageable = new PageRequest(pageNum - 1, pageSize); // （当前页， 每页记录数， 排序方式）
+        Page<OrderInfo> page = orderInterface.findAll(pageable);
+        List<OrderInfo> orderInfos = page.getContent();
+
+        PageInfo pageInfo = new PageInfo();
+
+        pageInfo.setFristPage(page.isFirst());
+
+        pageInfo.setLastPagee(page.isLast());
+
+        pageInfo.setTotalPage(page.getTotalPages());
+
+        pageInfo.setSize(page.getTotalElements());
+
+        PageReturn pageReturn =new PageReturn();
+
+        pageReturn.setContent(orderInfos);
+
+        pageReturn.setPageInfo(pageInfo);
+//       List<OrderInfo> orderInfos =  orderInterface.findAll();
+
+        return new ApiResponse<>(200,"查询订单成功",pageReturn);
+    }
+
+
 
     /*********************************获取新闻、博客******************************************/
     @RequestMapping(value = "/news/getNews",method = RequestMethod.POST)
@@ -248,29 +292,6 @@ public class ApiController {
 
     }
 
-    /*********************************增加矿机******************************************/
-    @RequestMapping(value = "/addMiner",method = RequestMethod.POST)
-    public ApiResponse addMiner(@RequestBody Miner miner){
-        miner.setMinerUuid(Utils.getUUID());
-        minerInterface.save(miner);
-        return new ApiResponse<>(200,"增加矿机型号成功",miner);
-    }
-
-    /*********************************管理员获取订单******************************************/
-    @RequestMapping(value = "user/getUserOrder",method = RequestMethod.POST)
-    public ApiResponse getUserOrder(@RequestBody HashMap<String,Object> map){
-        int pageNum = (int)map.get("pageNum");
-
-        // 排序方式，这里是以“recordNo”为标准进行降序
-//        Sort sort = new Sort(Sort.Direction.DESC, "recordNo");  // 这里的"recordNo"是实体类的主键，记住一定要是实体类的属性，而不能是数据库的字段
-
-        Pageable pageable = new PageRequest(pageNum - 1, 6); // （当前页， 每页记录数， 排序方式）
-        Page<OrderInfo> list = orderInterface.findAll(pageable);
-
-//       List<OrderInfo> orderInfos =  orderInterface.findAll();
-
-        return new ApiResponse<>(200,"查询订单成功",list);
-    }
 
 
 
@@ -293,15 +314,10 @@ public class ApiController {
         return new ApiResponse<>(200,"删除礼券成功",null);
     }
 
-
-
-
     //测试Token验证功能
     @UserTokenCheck //在需要验证token的方法上添加此注解
     @RequestMapping(value = "/token",method = RequestMethod.GET)
     public ApiResponse<String> checkToken(){
         return new ApiResponse<String>(9999,"OK",null);
     }
-
-
 }

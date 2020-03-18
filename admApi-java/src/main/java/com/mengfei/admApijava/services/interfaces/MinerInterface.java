@@ -11,7 +11,7 @@ public interface MinerInterface extends JpaRepository<Miner,Long> {
     Miner findByMinerUuid(String minerUuid);
 
 
-    List<Miner> findAllByCoinUuid(String coinUuid);
+
 
 
 

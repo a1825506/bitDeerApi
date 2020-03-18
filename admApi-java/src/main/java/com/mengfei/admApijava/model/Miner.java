@@ -29,21 +29,6 @@ public class Miner {
         this.minerUuid = minerUuid;
     }
 
-    public String getCoinUuid() {
-        return coinUuid;
-    }
-
-    public void setCoinUuid(String coinUuid) {
-        this.coinUuid = coinUuid;
-    }
-
-    public Integer getGeneration() {
-        return generation;
-    }
-
-    public void setGeneration(Integer generation) {
-        this.generation = generation;
-    }
 
     public String getMinerModel() {
         return minerModel;
@@ -96,12 +81,6 @@ public class Miner {
     @ApiModelProperty(value = "", name = "minerUuid", example = "矿机唯一标识,系统自动生成", required = false)
     private String minerUuid;
 
-    @ApiModelProperty(value = "", name = "coinUuid", example = "所属数字货币一标识,系统自动生成", required = false)
-    private String coinUuid;//所属数字货币
-
-    @ApiModelProperty(value = "", name = "generation", example = "矿机代数", required = false)
-    private Integer generation;//矿机代数
-
     @ApiModelProperty(value = "", name = "minerModel", example = "矿机型号", required = false)
     private String minerModel;//矿机型号
 
@@ -127,13 +106,22 @@ public class Miner {
         return "Miner{" +
                 "id=" + id +
                 ", minerUuid='" + minerUuid + '\'' +
-                ", coinUuid='" + coinUuid + '\'' +
-                ", generation=" + generation +
                 ", minerModel='" + minerModel + '\'' +
                 ", computingPower='" + computingPower + '\'' +
                 ", power='" + power + '\'' +
                 ", energyEfficiencyRatio='" + energyEfficiencyRatio + '\'' +
                 ", theoreticalReturn='" + theoreticalReturn + '\'' +
+                ", minimumHashrate='" + minimumHashrate + '\'' +
+
+
                 '}';
+    }
+
+    public String getMinimumHashrate() {
+        return minimumHashrate;
+    }
+
+    public void setMinimumHashrate(String minimumHashrate) {
+        this.minimumHashrate = minimumHashrate;
     }
 }
